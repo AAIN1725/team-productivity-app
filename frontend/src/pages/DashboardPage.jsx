@@ -73,7 +73,7 @@ export default function DashboardPage() {
             sprint={sprint}
             tasks={tasks}
             onTaskStatusChange={handleTaskStatusChange}
-            onSprintComplete={fetchDashboard}
+            onSprintComplete={() => setSprint(s => ({ ...s, status: 'completed' }))}
             onTaskUpdated={(updated) => {
               if (updated.deleted) setTasks(ts => ts.filter(t => t.id !== updated.id));
               else setTasks(ts => ts.map(t => t.id === updated.id ? updated : t));
