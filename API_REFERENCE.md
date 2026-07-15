@@ -2,7 +2,7 @@
 
 Base URL:
 - Local: `http://localhost:5000/api`
-- Production: `https://team-productivity-app.vercel.app/api`
+- Production: `https://team-productivity-app.onrender.com/api`
 
 All authenticated endpoints require the header:
 ```

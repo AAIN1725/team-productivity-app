@@ -35,7 +35,7 @@ A full-stack agile project management tool for small development teams. PMs plan
 | Auth | JWT (`jsonwebtoken`), bcrypt (`bcryptjs`) |
 | Rate Limiting | `express-rate-limit` |
 | Testing | Vitest, Supertest |
-| Deployment | Vercel (frontend), Railway (backend + DB) |
+| Deployment | Vercel (frontend), Render (backend), Neon (database) |
 
 ---
 
@@ -124,11 +124,11 @@ Tests are located in `backend/tests/`:
 3. Add the environment variable `VITE_API_URL` pointing to your deployed backend URL
 4. Push to `master` — Vercel auto-deploys on every push
 
-### Backend — Railway
+### Backend — Render
 
-1. Create a new Railway project and add a **PostgreSQL** plugin
-2. Add a new service pointing to the `backend` directory
-3. Set environment variables: `DATABASE_URL` (Railway provides this from the PostgreSQL plugin), `JWT_SECRET`, `CLIENT_URL`
+1. Create a new Render web service pointing to the `backend` directory
+2. Create a **PostgreSQL** database on [Neon](https://neon.tech) and copy the connection string
+3. Set environment variables: `DATABASE_URL` (from Neon), `JWT_SECRET`, `CLIENT_URL`
 4. Run the database migration once: `npm run migrate`
 
 ---
