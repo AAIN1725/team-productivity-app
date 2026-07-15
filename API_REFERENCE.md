@@ -2,7 +2,7 @@
 
 Base URL:
 - Local: `http://localhost:5000/api`
-- Production: `https://your-backend.railway.app/api` *(update with your Railway URL)*
+- Production: `https://team-productivity-app.vercel.app/api`
 
 All authenticated endpoints require the header:
 ```

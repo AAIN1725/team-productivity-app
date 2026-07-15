@@ -2,7 +2,7 @@
 
 A full-stack agile project management tool for small development teams. PMs plan sprints, assign tasks, and run retrospectives. Developers track their work on a mobile-responsive Kanban board and submit anonymous sprint feedback.
 
-**Live Demo:** *(add your Vercel URL here)*
+**Live Demo:** https://team-productivity-app.vercel.app
 
 ---
 
