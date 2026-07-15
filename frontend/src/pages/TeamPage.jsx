@@ -8,17 +8,22 @@ export default function TeamPage() {
   const [inviteCode, setInviteCode] = useState('');
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
+  function load() {
+    setLoading(true);
+    setError('');
     Promise.all([api.get('/api/team'), api.get('/api/team/invite-code')])
       .then(([teamRes, codeRes]) => {
         setTeam(teamRes.data.team);
         setMembers(teamRes.data.members);
         setInviteCode(codeRes.data.inviteCode);
       })
-      .catch(() => {})
+      .catch(() => setError('Could not load team data. Please refresh.'))
       .finally(() => setLoading(false));
-  }, []);
+  }
+
+  useEffect(() => { load(); }, []);
 
   function handleCopy() {
     navigator.clipboard.writeText(inviteCode).then(() => {
@@ -33,7 +38,12 @@ export default function TeamPage() {
       <div className="page-wrapper page-content">
         <div className="page-header"><h2>{team?.name || 'Team'}</h2></div>
 
-        {loading ? <div className="spinner" /> : (
+        {loading ? <div className="spinner" /> : error ? (
+          <div className="empty-state">
+            <p className="form-error" style={{ maxWidth: 400, margin: '0 auto 16px' }}>{error}</p>
+            <button className="btn btn-secondary btn-sm" onClick={load}>Try Again</button>
+          </div>
+        ) : (
           <>
             <div className="invite-box">
               <div>

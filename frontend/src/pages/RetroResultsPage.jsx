@@ -14,26 +14,47 @@ export default function RetroResultsPage() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState('');
   const [closing, setClosing] = useState(false);
+  const [closeError, setCloseError] = useState('');
   const [closed, setClosed] = useState(false);
 
-  useEffect(() => {
+  function load() {
+    setLoading(true);
+    setFetchError('');
     api.get(`/api/retro/${sprintId}/results`)
       .then(r => setData(r.data))
-      .catch(() => {})
+      .catch((err) => {
+        if (err.response?.status === 404) setData(null);
+        else setFetchError('Could not load retrospective results. Please refresh.');
+      })
       .finally(() => setLoading(false));
-  }, [sprintId]);
+  }
+
+  useEffect(() => { load(); }, [sprintId]);
 
   async function handleClose() {
     setClosing(true);
+    setCloseError('');
     try {
       await api.patch(`/api/retro/${sprintId}/close`);
       setClosed(true);
       setData(d => ({ ...d, sprint: { ...d.sprint, retroClosed: true } }));
-    } catch {} finally { setClosing(false); }
+    } catch {
+      setCloseError('Could not close the retrospective. Please try again.');
+    } finally { setClosing(false); }
   }
 
   if (loading) return <><Nav /><div className="page-wrapper page-content"><div className="spinner" /></div></>;
+
+  if (fetchError) return (
+    <><Nav /><div className="page-wrapper page-content">
+      <div className="empty-state">
+        <p className="form-error" style={{ maxWidth: 400, margin: '0 auto 16px' }}>{fetchError}</p>
+        <button className="btn btn-secondary btn-sm" onClick={load}>Try Again</button>
+      </div>
+    </div></>
+  );
 
   if (!data) return <><Nav /><div className="page-wrapper page-content"><div className="empty-state"><h3>Results not found.</h3></div></div></>;
 
@@ -60,6 +81,7 @@ export default function RetroResultsPage() {
               onClick={() => navigate('/sprint/new')}>Create New Sprint</button>
           </div>
         )}
+        {closeError && <div className="form-error" style={{ marginBottom: 20 }}>{closeError}</div>}
 
         <div className="participation-bar">
           {participation.submitted} of {participation.total} team members responded

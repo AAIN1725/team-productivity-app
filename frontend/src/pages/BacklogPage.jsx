@@ -9,12 +9,14 @@ export default function BacklogPage() {
   const [members, setMembers] = useState([]);
   const [activeSprint, setActiveSprint] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showCreate, setShowCreate] = useState(false);
   const [editTask, setEditTask] = useState(null);
   const [showAddSprint, setShowAddSprint] = useState(false);
 
   const fetch = useCallback(async () => {
     setLoading(true);
+    setError('');
     try {
       const [tasksRes, teamRes, sprintRes] = await Promise.all([
         api.get('/api/tasks/backlog'),
@@ -24,7 +26,9 @@ export default function BacklogPage() {
       setTasks(tasksRes.data.tasks);
       setMembers(teamRes.data.members);
       setActiveSprint(sprintRes.data.sprint);
-    } catch {} finally { setLoading(false); }
+    } catch {
+      setError('Could not load backlog. Please refresh.');
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { fetch(); }, [fetch]);
@@ -56,7 +60,13 @@ export default function BacklogPage() {
           </div>
         </div>
 
-        {loading ? <div className="spinner" /> : tasks.length === 0 ? (
+        {error && (
+          <div className="empty-state">
+            <div className="form-error" style={{ maxWidth: 400, margin: '0 auto 16px' }}>{error}</div>
+            <button className="btn btn-secondary btn-sm" onClick={fetch}>Try Again</button>
+          </div>
+        )}
+        {loading ? <div className="spinner" /> : error ? null : tasks.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon">📭</div>
             <h3>Backlog is empty</h3>
@@ -64,6 +74,7 @@ export default function BacklogPage() {
           </div>
         ) : (
           <div className="card">
+            <div style={{ overflowX: 'auto' }}>
             <table className="task-table">
               <thead>
                 <tr>
@@ -90,6 +101,7 @@ export default function BacklogPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )}
       </div>

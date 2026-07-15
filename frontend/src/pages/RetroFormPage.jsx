@@ -19,6 +19,7 @@ export default function RetroFormPage() {
   const [answers, setAnswers] = useState(['', '', '']);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
+  const [fetchError, setFetchError] = useState('');
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
 
@@ -29,7 +30,9 @@ export default function RetroFormPage() {
     ]).then(([statusRes, tasksRes]) => {
       if (statusRes.data.submitted) setSubmitted(true);
       setDoneTasks(tasksRes.data.tasks.filter(t => t.status === 'done'));
-    }).catch(() => {}).finally(() => setChecking(false));
+    }).catch(() => {
+      setFetchError('Could not load sprint data. Please refresh and try again.');
+    }).finally(() => setChecking(false));
   }, [sprintId]);
 
   function validate() {
@@ -104,6 +107,7 @@ export default function RetroFormPage() {
           <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 24 }}>
             Your responses are anonymous — your name will never be shown alongside your answers.
           </p>
+          {fetchError && <div className="form-error">{fetchError}</div>}
           {serverError && <div className="form-error">{serverError}</div>}
           <form onSubmit={handleSubmit} noValidate>
             {QUESTIONS.map((q, i) => (

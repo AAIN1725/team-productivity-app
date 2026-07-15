@@ -24,7 +24,8 @@ export default function DashboardPage() {
         setTasks([]);
       }
     } catch {
-      setError('Failed to load dashboard. Please refresh.');
+      setError('Could not load dashboard. Please refresh.');
+      setSprint(null);
     }
   }, []);
 
@@ -55,8 +56,8 @@ export default function DashboardPage() {
         <Nav />
         <div className="page-wrapper page-content">
           <div className="empty-state">
-            <p style={{ color: 'var(--danger)', marginBottom: 12 }}>{error}</p>
-            <button className="btn btn-secondary btn-sm" onClick={fetchDashboard}>Retry</button>
+            <div className="form-error" style={{ maxWidth: 400, margin: '0 auto 16px' }}>{error}</div>
+            <button className="btn btn-secondary btn-sm" onClick={fetchDashboard}>Try Again</button>
           </div>
         </div>
       </>

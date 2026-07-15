@@ -8,6 +8,7 @@ export default function ActiveSprintView({ sprint, tasks, onTaskStatusChange, on
   const { user } = useAuth();
   const [showConfirm, setShowConfirm] = useState(false);
   const [completing, setCompleting] = useState(false);
+  const [completeError, setCompleteError] = useState('');
   const [selectedTask, setSelectedTask] = useState(null);
   const [members, setMembers] = useState([]);
 
@@ -19,13 +20,18 @@ export default function ActiveSprintView({ sprint, tasks, onTaskStatusChange, on
 
   async function handleComplete() {
     setCompleting(true);
+    setCompleteError('');
     try {
       await api.patch(`/api/sprints/${sprint.id}/complete`);
       setShowConfirm(false);
       onSprintComplete();
-    } catch {
-      // already completed or error — re-fetch state
-      onSprintComplete();
+    } catch (err) {
+      if (err.response?.status === 409) {
+        setShowConfirm(false);
+        onSprintComplete();
+      } else {
+        setCompleteError('Could not complete the sprint. Please try again.');
+      }
     } finally {
       setCompleting(false);
     }
@@ -71,6 +77,7 @@ export default function ActiveSprintView({ sprint, tasks, onTaskStatusChange, on
                   <>All tasks are complete. Ready to close this sprint?</>
                 )}
               </p>
+              {completeError && <div className="form-error" style={{ marginTop: 12 }}>{completeError}</div>}
             </div>
             <div className="modal-footer">
               <button className="btn btn-secondary btn-sm" onClick={() => setShowConfirm(false)}>Cancel</button>

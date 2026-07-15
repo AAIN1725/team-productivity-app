@@ -5,6 +5,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem('token');
@@ -21,13 +22,18 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('token');
       }
     }
+    setAuthLoading(false);
   }, []);
 
   function login(newToken) {
-    const payload = JSON.parse(atob(newToken.split('.')[1]));
-    setToken(newToken);
-    setUser({ id: payload.id, name: payload.name, email: payload.email, role: payload.role, teamId: payload.team_id });
-    localStorage.setItem('token', newToken);
+    try {
+      const payload = JSON.parse(atob(newToken.split('.')[1]));
+      setToken(newToken);
+      setUser({ id: payload.id, name: payload.name, email: payload.email, role: payload.role, teamId: payload.team_id });
+      localStorage.setItem('token', newToken);
+    } catch {
+      localStorage.removeItem('token');
+    }
   }
 
   function logout() {
@@ -37,7 +43,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!user, authLoading }}>
       {children}
     </AuthContext.Provider>
   );

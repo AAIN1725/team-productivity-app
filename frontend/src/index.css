@@ -72,6 +72,9 @@ nav .nav-logout {
   padding: 6px 10px; border-radius: 6px; margin-left: 8px;
 }
 nav .nav-logout:hover { background: rgba(255,255,255,0.1); color: #fff; }
+nav .nav-links { display: flex; align-items: center; gap: 8px; }
+nav .nav-right { display: flex; align-items: center; }
+nav .nav-hamburger { display: none; }
 
 /* Auth pages */
 .auth-page {
@@ -369,7 +372,7 @@ nav .nav-logout:hover { background: rgba(255,255,255,0.1); color: #fff; }
   background: #166534; color: #fff;
   border-radius: var(--radius); padding: 20px 24px;
   margin-bottom: 24px;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
 }
 .sprint-complete-banner h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 .sprint-complete-banner p { font-size: 13px; opacity: 0.85; }
@@ -378,4 +381,67 @@ nav .nav-logout:hover { background: rgba(255,255,255,0.1); color: #fff; }
 /* Confirm modal */
 .confirm-warning { font-size: 14px; line-height: 1.6; color: var(--text); }
 .confirm-warning strong { color: var(--danger); }
+
+/* ===================== Mobile Responsive ===================== */
+
+/* Tablet & mobile — 768px and below */
+@media (max-width: 768px) {
+  /* Nav — hide links, show hamburger */
+  nav { flex-wrap: wrap; height: auto; min-height: 56px; padding: 0 16px; position: relative; }
+  nav .nav-links { display: none; width: 100%; flex-direction: column; padding: 8px 0 12px; gap: 2px; }
+  nav .nav-links.open { display: flex; }
+  nav .nav-links a { padding: 10px 12px; border-radius: 6px; font-size: 14px; }
+  .nav-brand { margin-right: 0; }
+  .nav-spacer { display: none; }
+  .nav-right { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+  nav .nav-hamburger {
+    display: flex; align-items: center; justify-content: center;
+    background: none; border: none; color: #a5b4fc;
+    font-size: 20px; padding: 8px; border-radius: 6px;
+    line-height: 1;
+  }
+  nav .nav-hamburger:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+  /* Page wrapper — reduce side padding */
+  .page-wrapper { padding: 0 16px; }
+
+  /* Kanban — horizontal scroll on mobile */
+  .kanban-board {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 12px;
+    padding-bottom: 16px;
+  }
+  .kanban-col {
+    min-width: 260px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  /* Sprint info strip — stack on small screens */
+  .sprint-info { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  /* Page header — wrap on small screens */
+  .page-header { flex-wrap: wrap; gap: 10px; }
+
+  /* Retro results — single column */
+  .retro-results-grid { grid-template-columns: 1fr; }
+
+  /* Invite box — stack vertically */
+  .invite-box { flex-direction: column; gap: 12px; align-items: flex-start; }
+
+  /* Modal — full width on small screens */
+  .modal-backdrop { padding: 12px; }
+}
+
+/* Small phone — 480px and below */
+@media (max-width: 480px) {
+  /* Auth card — tighter padding */
+  .auth-card { padding: 28px 20px; }
+
+  /* Nav user label — hide role on very small screens */
+  .nav-user { font-size: 11px; }
+}
 
