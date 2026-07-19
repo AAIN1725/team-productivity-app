@@ -18,12 +18,6 @@ A full-stack agile project management tool for small development teams. PMs plan
 
 ---
 
-## Screenshot
-
-*(add a screenshot of the Kanban board here)*
-
----
-
 ## Tech Stack
 
 | Layer | Technology |
@@ -157,7 +151,3 @@ See [API_REFERENCE.md](./API_REFERENCE.md) for the full endpoint documentation.
 4. Push and open a Pull Request against `master`
 
 ---
-
-## License
-
-MIT
