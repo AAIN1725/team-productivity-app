@@ -133,7 +133,7 @@ See [API_REFERENCE.md](./API_REFERENCE.md) for the full endpoint documentation.
 
 ---
 
-## Security Notes
+## Security Checklist
 
 - All SQL queries use parameterized statements — no SQL injection risk
 - Passwords are hashed with bcrypt (salt rounds: 10)
